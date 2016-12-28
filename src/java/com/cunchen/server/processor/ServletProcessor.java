@@ -2,7 +2,9 @@ package com.cunchen.server.processor;
 
 import com.cunchen.Constants;
 import com.cunchen.server.io.Request;
+import com.cunchen.server.io.RequestFacade;
 import com.cunchen.server.io.Response;
+import com.cunchen.server.io.ResponseFacade;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -52,9 +54,11 @@ public class ServletProcessor {
         }
 
         Servlet servlet = null;
+        RequestFacade requestFacade = new RequestFacade(request);
+        ResponseFacade responseFacade = new ResponseFacade(response);
         try {
             servlet = (Servlet) myClass.newInstance();
-            servlet.service((ServletRequest) request, (ServletResponse) response);
+            servlet.service((ServletRequest) requestFacade, (ServletResponse) responseFacade);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {

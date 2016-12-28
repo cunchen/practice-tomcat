@@ -1,5 +1,6 @@
 package com.cunchen.server.io;
 
+import com.cunchen.Constants;
 import com.cunchen.HttpServer;
 
 import javax.servlet.ServletOutputStream;
@@ -31,7 +32,7 @@ public class Response implements ServletResponse {
         FileInputStream fis = null;
         if(request == null)
             return;
-        File file = new File(HttpServer.WEB_ROOT, request.getUri());
+        File file = new File(Constants.WEB_ROOT, request.getUri());
         try {
             if(file.isFile()) {
                 fis = new FileInputStream(file);
