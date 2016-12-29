@@ -1,30 +1,63 @@
 package com.cunchen.server.io;
 
+import org.apache.catalina.util.ParameterMap;
+
 import javax.servlet.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Enumeration;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
- * Created by wqd on 2016/12/28.
+ * Created by wqd on 2016/12/29.
  */
-public class RequestFacade implements ServletRequest {
+public class HttpRequest implements ServletRequest {
 
-    private ServletRequest request = null;
+    protected HashMap<String, String> headers = new HashMap();
 
-    public RequestFacade(HttpRequest request) {
-        this.request = request;
+    protected ArrayList cookies = new ArrayList();
+
+    protected ParameterMap parameters = null;
+
+    private SocketInputStream input ;
+
+    private String uri;
+
+    public HttpRequest(SocketInputStream input) {
+        this.input = input;
     }
 
-    public Object getAttribute(String attribute) {
-        return request.getAttribute(attribute);
+    /**
+     * 参数解析
+     */
+    public void parse() {
+
     }
 
-    public Enumeration getAttributeNames() {
-        return request.getAttributeNames();
+    /**
+     * URI解析
+     */
+    public void parseUri() {
+
+    }
+
+    /**
+     * 获取解析后uri
+     * 需要先调用 parse()方法
+     * @return String Uri字符
+     */
+    public String getRequestURI() {
+        return uri;
+    }
+
+    @Override
+    public Object getAttribute(String s) {
+        return null;
+    }
+
+    @Override
+    public Enumeration<String> getAttributeNames() {
+        return null;
     }
 
     @Override

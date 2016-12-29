@@ -1,12 +1,13 @@
 package com.cunchen.processor;
 
 import com.cunchen.connector.HttpConnector;
-import com.cunchen.server.io.Request;
-import com.cunchen.server.io.Response;
+import com.cunchen.server.io.HttpRequest;
+import com.cunchen.server.io.HttpResponse;
+import com.cunchen.server.io.SocketInputStream;
 import com.cunchen.server.processor.ServletProcessor;
+import com.cunchen.server.processor.StaticResourceProcessor;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
@@ -16,27 +17,59 @@ import java.net.Socket;
 public class HttpProcessor {
 
     private HttpConnector httpConnector ;
+    private HttpRequest request;
+    private HttpResponse response;
 
     public HttpProcessor(HttpConnector httpConnector) {
         this.httpConnector = httpConnector;
     }
 
     public void process(Socket socket) {
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
+        SocketInputStream input = null;
+        OutputStream output = null;
         try {
-            inputStream = socket.getInputStream();
-            Request request = new Request(inputStream);
+            input = new SocketInputStream(socket.getInputStream(), 2048);
+            request = new HttpRequest(input);
             request.parse();
 
-            outputStream = socket.getOutputStream();
-            Response response = new Response(outputStream);
+            output = socket.getOutputStream();
+            response = new HttpResponse(output);
+            response.setRequest(request);
+            response.setHeader("Server", "Pyrmont Servlet Container");
 
-            String uri = request.getUri();
+            parseRequest(input, output);
+            parseHeaders(input);
 
-            if(uri.)
+            if(request.getRequestURI().startsWith("/servlet/")) {
+                ServletProcessor processor = new ServletProcessor();
+                processor.process(request, response);
+            } else {
+                StaticResourceProcessor processor = new StaticResourceProcessor();
+                processor.process(request, response);
+            }
+
+            socket.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Io流Request解析
+     * @param input 输入流
+     * @param output 输出流
+     */
+    private void parseRequest(SocketInputStream input, OutputStream output) {
+
+
+    }
+
+    /**
+     * 头解析
+     * @param inputStream 输入流
+     */
+    private void parseHeaders(SocketInputStream inputStream) {
+
     }
 }

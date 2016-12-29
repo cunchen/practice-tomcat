@@ -1,9 +1,9 @@
 package com.cunchen.server.processor;
 
 import com.cunchen.Constants;
-import com.cunchen.server.io.Request;
+import com.cunchen.server.io.HttpRequest;
+import com.cunchen.server.io.HttpResponse;
 import com.cunchen.server.io.RequestFacade;
-import com.cunchen.server.io.Response;
 import com.cunchen.server.io.ResponseFacade;
 
 import javax.servlet.Servlet;
@@ -27,8 +27,8 @@ public class ServletProcessor {
      * @param request 请求 处理
      * @param response 结果处理
      */
-    public void process(Request request, Response response) {
-        String uri = request.getUri();
+    public void process(HttpRequest request, HttpResponse response) {
+        String uri = request.getRequestURI();
         String servletName = uri.substring(uri.lastIndexOf("/") + 1);
         URLClassLoader loader = null;
 
