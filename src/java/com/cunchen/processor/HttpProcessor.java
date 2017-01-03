@@ -3,10 +3,12 @@ package com.cunchen.processor;
 import com.cunchen.connector.HttpConnector;
 import com.cunchen.server.io.HttpRequest;
 import com.cunchen.server.io.HttpResponse;
+import com.cunchen.server.io.RequestLine;
 import com.cunchen.server.io.SocketInputStream;
 import com.cunchen.server.processor.ServletProcessor;
 import com.cunchen.server.processor.StaticResourceProcessor;
 
+import javax.servlet.ServletException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -20,6 +22,12 @@ public class HttpProcessor {
     private HttpRequest request;
     private HttpResponse response;
 
+
+    private String uri;
+    private String protocol;
+
+    private RequestLine requestLine;
+
     public HttpProcessor(HttpConnector httpConnector) {
         this.httpConnector = httpConnector;
     }
@@ -30,7 +38,6 @@ public class HttpProcessor {
         try {
             input = new SocketInputStream(socket.getInputStream(), 2048);
             request = new HttpRequest(input);
-            request.parse();
 
             output = socket.getOutputStream();
             response = new HttpResponse(output);
@@ -52,6 +59,8 @@ public class HttpProcessor {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ServletException e) {
+            e.printStackTrace();
         }
     }
 
@@ -60,9 +69,78 @@ public class HttpProcessor {
      * @param input 输入流
      * @param output 输出流
      */
-    private void parseRequest(SocketInputStream input, OutputStream output) {
+    private void parseRequest(SocketInputStream input, OutputStream output) throws ServletException {
+        input.readRequestLine(requestLine);
+        String method = new String(requestLine.method, 0, requestLine.methodEnd);
 
+        if(method.length() < 1) {
+            throw new ServletException("Missing HTTP request method");
+        } else if(requestLine.uriEnd < 1) {
+            throw  new ServletException("Missing HTTP request URI");
+        }
 
+        int question = requestLine.indexOf("?");
+        if(question >= 0) {
+            request.setQueryString(new String(requestLine.uri, question + 1, requestLine.uriEnd - question -1));
+            uri = new String(requestLine.uri, 0 , question);
+        } else {
+            request.setQueryString(null);
+            uri = new String(requestLine.uri, 0 , requestLine.uriEnd);
+        }
+        //Checking for an absolute URI
+        if(!uri.startsWith("/")) {
+            int pos = uri.indexOf("://");
+            //Parsing out protocol and hsot name
+            if(pos != -1) {
+                uri = "";
+            } else {
+                uri = uri.substring(pos);
+            }
+
+            String match = ";jessionid=";
+            int semicolon = uri.indexOf(match);
+            if (semicolon >= 0) {
+                String rest = uri.substring(semicolon + match.length());
+                int semicolon2 = rest.indexOf(';');
+                if(semicolon2 >= 0) {
+                    request.setRequestedSessionId(rest.substring(0, semicolon2));
+                    rest = rest.substring(semicolon2);
+                } else {
+                    request.setRequestedSessionId(rest);
+                    rest = "";
+                }
+                request.setRequestedSessionURL(true);
+                uri = uri.substring(0, semicolon) + rest;
+            } else {
+                request.setRequestedSessionId(null);
+                request.setRequestedSessionURL(false);
+            }
+
+            //Normalize URI
+            String normalizedUri = normalize(uri);
+
+            //Set the corresponding request properties
+            ((HttpRequest) request).setMethod(method);
+            request.setProtocol(protocol);
+            if(normalizedUri != null) {
+                ((HttpRequest) request).setRequestURI(normalizedUri);
+            } else {
+                ((HttpRequest) request).setRequestURI(uri);
+            }
+
+            if(normalizedUri == null) {
+                throw new ServletException("Invalid URI: " + uri + "'");
+            }
+        }
+    }
+
+    /**
+     * normalize处理化
+     * @param uri
+     * @return
+     */
+    private String normalize(String uri) {
+        return null;
     }
 
     /**

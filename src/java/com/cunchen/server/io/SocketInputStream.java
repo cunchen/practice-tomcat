@@ -17,4 +17,7 @@ public class SocketInputStream {
     public SocketInputStream(InputStream inputStream, int buffersize) {
 
     }
+
+    public void readRequestLine(RequestLine requestLine) {
+    }
 }

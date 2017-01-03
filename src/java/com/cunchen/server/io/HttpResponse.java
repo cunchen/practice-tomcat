@@ -1,6 +1,7 @@
 package com.cunchen.server.io;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,14 +15,14 @@ import java.util.Locale;
 public class HttpResponse extends Response implements ServletResponse {
 
     private OutputStream outputStream;
-    private HttpRequest request;
+    private ServletRequest request;
 
     public HttpResponse(OutputStream outputStream) {
         super(outputStream);
         this.outputStream = outputStream;
     }
 
-    public void setRequest(HttpRequest request) {
+    public void setRequest(ServletRequest request) {
         this.request = request;
     }
 
