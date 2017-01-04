@@ -1,5 +1,7 @@
 package com.cunchen.server.io;
 
+import com.cunchen.server.header.HttpHeader;
+
 import java.io.InputStream;
 
 /**
@@ -19,5 +21,9 @@ public class SocketInputStream {
     }
 
     public void readRequestLine(RequestLine requestLine) {
+    }
+
+    public void readHeader(HttpHeader header) {
+
     }
 }

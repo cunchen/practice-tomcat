@@ -31,6 +31,8 @@ public class HttpRequest implements ServletRequest {
     private String method;
     private String protocol;
     private String requestURI;
+    private int contentLength;
+    private String contentType;
 
     public HttpRequest(SocketInputStream input) {
         this.input = input;
@@ -262,5 +264,22 @@ public class HttpRequest implements ServletRequest {
 
     public void setRequestURI(String requestURI) {
         this.requestURI = requestURI;
+    }
+
+    /**
+     * 将Header内容读入
+     * @param name HeaderName
+     * @param value HeaderValue
+     */
+    public void addHeader(String name, String value) {
+        headers.put(name, value);
+    }
+
+    public void setContentLength(int contentLength) {
+        this.contentLength = contentLength;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 }

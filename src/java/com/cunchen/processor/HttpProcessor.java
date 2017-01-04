@@ -1,6 +1,7 @@
 package com.cunchen.processor;
 
 import com.cunchen.connector.HttpConnector;
+import com.cunchen.server.header.HttpHeader;
 import com.cunchen.server.io.HttpRequest;
 import com.cunchen.server.io.HttpResponse;
 import com.cunchen.server.io.RequestLine;
@@ -60,6 +61,7 @@ public class HttpProcessor {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ServletException e) {
+
             e.printStackTrace();
         }
     }
@@ -147,7 +149,42 @@ public class HttpProcessor {
      * 头解析
      * @param inputStream 输入流
      */
-    private void parseHeaders(SocketInputStream inputStream) {
+    private void parseHeaders(SocketInputStream input) throws ServletException {
 
+        HttpHeader header = new HttpHeader();
+
+        input.readHeader(header);
+
+        if(header.nameEnd == 0) {
+            if( header.valueEnd == 0) {
+                return;
+            } else {
+                throw new ServletException("Parse Header errror!");
+            }
+        }
+
+        String name = new String(header.name, 0, header.nameEnd);
+        String value = new String(header.value, 0, header.valueEnd);
+
+        //加入HashMap
+        request.addHeader(name, value);
+
+        if(name.equals("cookie")) {
+            parseCookie();
+        } else if(name.equals("content-length")) {
+            int n = -1;
+            try {
+                n = Integer.parseInt(value);
+            } catch (NumberFormatException e) {
+                throw new ServletException(("Parse Header Content Length Exception!"));
+            }
+            request.setContentLength(n);
+        } else if(name.equals("content-type")) {
+            request.setContentType(value);
+        }
+    }
+
+    //TODO
+    private void parseCookie() {
     }
 }
