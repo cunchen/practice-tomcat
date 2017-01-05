@@ -8,13 +8,16 @@ import com.cunchen.server.io.RequestLine;
 import com.cunchen.server.io.SocketInputStream;
 import com.cunchen.server.processor.ServletProcessor;
 import com.cunchen.server.processor.StaticResourceProcessor;
+import com.cunchen.util.RequestUtil;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
 /**
+ * Http解析器
  * Created by wqd on 2016/12/28.
  */
 public class HttpProcessor {
@@ -147,7 +150,7 @@ public class HttpProcessor {
 
     /**
      * 头解析
-     * @param inputStream 输入流
+     * @param input 输入流
      */
     private void parseHeaders(SocketInputStream input) throws ServletException {
 
@@ -170,7 +173,7 @@ public class HttpProcessor {
         request.addHeader(name, value);
 
         if(name.equals("cookie")) {
-            parseCookie();
+            parseCookie(value);
         } else if(name.equals("content-length")) {
             int n = -1;
             try {
@@ -185,6 +188,16 @@ public class HttpProcessor {
     }
 
     //TODO
-    private void parseCookie() {
+    private void parseCookie(String value) {
+        Cookie cookies[] = RequestUtil.parseCookieHeader(value);
+        for (int i = 0; i < cookies.length; i++) {
+            if(cookies[i].getName().equals("jsessionid")) {
+                //Accept only the first session id cookie
+                request.setRequestedSessionId(cookies[i].getValue());
+                request.setRequestedSessionCookie(true);
+                request.setRequestedSessionURL(false);
+            }
+            request.addCookie(cookies[i]);
+        }
     }
 }

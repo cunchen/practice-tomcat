@@ -1,21 +1,24 @@
 package com.cunchen.server.io;
 
+import com.cunchen.util.RequestUtil;
 import org.apache.catalina.util.ParameterMap;
 
 import javax.servlet.*;
+import javax.servlet.http.Cookie;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**
+ * Http请求类
  * Created by wqd on 2016/12/29.
  */
 public class HttpRequest implements ServletRequest {
 
-    protected HashMap<String, String> headers = new HashMap();
+    protected ParameterMap<String, String> headers = new ParameterMap();
 
-    protected ArrayList cookies = new ArrayList();
+    protected ArrayList<Cookie> cookies = new ArrayList();
 
     protected ParameterMap parameters = null;
 
@@ -23,6 +26,9 @@ public class HttpRequest implements ServletRequest {
 
     private String uri;
 
+    /**
+     * 请求问号后边的参数
+     */
     private String queryString;
 
     private String requestedSessionId;
@@ -33,16 +39,39 @@ public class HttpRequest implements ServletRequest {
     private String requestURI;
     private int contentLength;
     private String contentType;
+    private boolean requestedSessionCookie;
+
+    //标记是否已被解析
+    private boolean parsed;
 
     public HttpRequest(SocketInputStream input) {
         this.input = input;
     }
 
     /**
-     * 参数解析
+     * 解析
      */
     public void parse() {
 
+    }
+
+    /**
+     * 参数解析
+     */
+    public void parseParameters() {
+        if(parsed)
+            return;
+        ParameterMap results = parameters;
+        if(results == null)
+            results = new ParameterMap();
+        results.setLocked(false);
+        String encoding = getCharacterEncoding();
+        if(encoding == null)
+            encoding = "ISO-8859-1";
+
+        String queryString = getQueryString();
+
+        RequestUtil.parseParameters(results, queryString, encoding);
     }
 
     /**
@@ -246,6 +275,8 @@ public class HttpRequest implements ServletRequest {
         this.queryString = queryString;
     }
 
+    public String getQueryString( ) { return  queryString; }
+
     public void setRequestedSessionId(String requestedSessionId) {
         this.requestedSessionId = requestedSessionId;
     }
@@ -281,5 +312,14 @@ public class HttpRequest implements ServletRequest {
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
+    }
+
+    public void setRequestedSessionCookie(boolean requestedSessionCookie) {
+        this.requestedSessionCookie = requestedSessionCookie;
+    }
+
+    //TODO
+    public void addCookie(Cookie cookie) {
+        cookies.add(cookie);
     }
 }

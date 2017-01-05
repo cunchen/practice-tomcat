@@ -1,5 +1,7 @@
 package com.cunchen.util;
 
+import org.apache.catalina.util.ParameterMap;
+
 import javax.servlet.http.Cookie;
 import java.util.ArrayList;
 
@@ -9,7 +11,12 @@ import java.util.ArrayList;
  */
 public class RequestUtil {
 
-    public static Cookie[] parseCookieheader(String header) {
+    /**
+     * 解析 Cookie头
+     * @param header
+     * @return
+     */
+    public static Cookie[] parseCookieHeader(String header) {
         if((header == null) || (header.length() < 0))
             return (new Cookie[0]);
         ArrayList cookies = new ArrayList();
@@ -37,5 +44,11 @@ public class RequestUtil {
             }
         }
         return ((Cookie[]) cookies.toArray(new Cookie[cookies.size()]));
+    }
+
+    //TODO
+    public static String parseParameters(ParameterMap results, String queryString, String encoding) {
+
+        return null;
     }
 }
