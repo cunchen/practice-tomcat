@@ -1,10 +1,14 @@
 package com.cunchen.server.io;
 
+import com.cunchen.connector.ResponseStream;
+import com.cunchen.connector.ResponseWriter;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Locale;
 
@@ -16,6 +20,8 @@ public class HttpResponse extends Response implements ServletResponse {
 
     private OutputStream outputStream;
     private ServletRequest request;
+
+    private PrintWriter writer;
 
     public HttpResponse(OutputStream outputStream) {
         super(outputStream);
@@ -41,12 +47,21 @@ public class HttpResponse extends Response implements ServletResponse {
 
     @Override
     public ServletOutputStream getOutputStream() throws IOException {
-        return null;
+        return (ServletOutputStream) request;
     }
 
+    /**
+     * 获取输出PrintWriter
+     * @return
+     * @throws IOException
+     */
     @Override
     public PrintWriter getWriter() throws IOException {
-        return null;
+        ResponseStream newStream = new ResponseStream(this);
+        newStream.setCommit(false);
+        OutputStreamWriter osr = new OutputStreamWriter(newStream, getCharacterEncoding());
+        this.writer = new ResponseWriter(osr);
+        return writer;
     }
 
     @Override
