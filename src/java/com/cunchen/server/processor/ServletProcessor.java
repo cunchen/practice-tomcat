@@ -1,10 +1,7 @@
 package com.cunchen.server.processor;
 
 import com.cunchen.Constants;
-import com.cunchen.server.io.HttpRequest;
-import com.cunchen.server.io.HttpResponse;
-import com.cunchen.server.io.RequestFacade;
-import com.cunchen.server.io.ResponseFacade;
+import com.cunchen.server.io.*;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -58,7 +55,10 @@ public class ServletProcessor {
         ResponseFacade responseFacade = new ResponseFacade(response);
         try {
             servlet = (Servlet) myClass.newInstance();
-            servlet.service((ServletRequest) requestFacade, (ServletResponse) responseFacade);
+            HttpRequestFacde requestFacde = new HttpRequestFacde(request);
+            HttpResponseFacde responseFacde = new HttpResponseFacde();
+            servlet.service(requestFacade, responseFacade);
+            ((HttpResponse) response).finishResponse();
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {

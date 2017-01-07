@@ -119,4 +119,7 @@ public class HttpResponse extends Response implements ServletResponse {
         return null;
     }
 
+    public void finishResponse() {
+
+    }
 }

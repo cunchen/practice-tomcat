@@ -30,7 +30,7 @@ public class HttpProcessor {
     private String uri;
     private String protocol;
 
-    private RequestLine requestLine;
+    private RequestLine requestLine = new RequestLine();
 
     public HttpProcessor(HttpConnector httpConnector) {
         this.httpConnector = httpConnector;
@@ -150,44 +150,44 @@ public class HttpProcessor {
 
     /**
      * 头解析
+     * 循环读入Io流，直到所有头部读取完成
      * @param input 输入流
      */
     private void parseHeaders(SocketInputStream input) throws ServletException {
 
-        HttpHeader header = new HttpHeader();
+        HttpHeader header = null;
+        for (header = new HttpHeader(); input.readHeader(header); header = new HttpHeader()) {
 
-        input.readHeader(header);
-
-        if(header.nameEnd == 0) {
-            if( header.valueEnd == 0) {
-                return;
-            } else {
-                throw new ServletException("Parse Header errror!");
+            if (header.nameEnd == 0) {
+                if (header.valueEnd == 0) {
+                    return;
+                } else {
+                    throw new ServletException("Parse Header errror!");
+                }
             }
-        }
 
-        String name = new String(header.name, 0, header.nameEnd);
-        String value = new String(header.value, 0, header.valueEnd);
+            String name = new String(header.name, 0, header.nameEnd);
+            String value = new String(header.value, 0, header.valueEnd);
 
-        //加入HashMap
-        request.addHeader(name, value);
+            //加入HashMap
+            request.addHeader(name, value);
 
-        if(name.equals("cookie")) {
-            parseCookie(value);
-        } else if(name.equals("content-length")) {
-            int n = -1;
-            try {
-                n = Integer.parseInt(value);
-            } catch (NumberFormatException e) {
-                throw new ServletException(("Parse Header Content Length Exception!"));
+            if (name.equals("cookie")) {
+                parseCookie(value);
+            } else if (name.equals("content-length")) {
+                int n = -1;
+                try {
+                    n = Integer.parseInt(value);
+                } catch (NumberFormatException e) {
+                    throw new ServletException(("Parse Header Content Length Exception!"));
+                }
+                request.setContentLength(n);
+            } else if (name.equals("content-type")) {
+                request.setContentType(value);
             }
-            request.setContentLength(n);
-        } else if(name.equals("content-type")) {
-            request.setContentType(value);
         }
     }
 
-    //TODO
     private void parseCookie(String value) {
         Cookie cookies[] = RequestUtil.parseCookieHeader(value);
         for (int i = 0; i < cookies.length; i++) {

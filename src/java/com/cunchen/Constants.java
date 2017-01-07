@@ -8,4 +8,25 @@ import java.io.File;
  */
 public class Constants {
     public final static String WEB_ROOT = Constants.class.getClassLoader().getResource("").getFile();
+
+    //punctuation ?
+    public final static String PUNCATUATION_QUESTION = "?";
+
+    //Slash
+    public final static String PUNCATUATION_SLASH = "/";
+
+    //Backslash
+    public final static String PUNCATUATION_BACkSLASH = "\\";
+
+    //semicolon
+    public final static String PUNCATUATION_SEMICOLON = ";";
+
+    //black
+    public final static String PUNCATUATION_BLACK = " ";
+
+    //punctuation &
+    public final static String PUNCATUATION_AND = "&";
+
+    //punctuation :
+    public final static String PUNCATUATION_COLON = ":";
 }
