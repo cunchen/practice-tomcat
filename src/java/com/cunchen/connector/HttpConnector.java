@@ -34,6 +34,11 @@ public class HttpConnector implements Runnable{
             Socket socket = null;
             try {
                 socket = serverSocket.accept();
+
+                //判断是否由于端口映射造成的二次访问
+                if(socket.getLocalPort() != port)
+                    continue;
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

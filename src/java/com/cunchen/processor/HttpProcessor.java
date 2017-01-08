@@ -92,6 +92,7 @@ public class HttpProcessor {
             request.setQueryString(null);
             uri = new String(requestLine.uri, 0 , requestLine.uriEnd);
         }
+
         //Checking for an absolute URI
         if(!uri.startsWith("/")) {
             int pos = uri.indexOf("://");
@@ -186,6 +187,7 @@ public class HttpProcessor {
                 request.setContentType(value);
             }
         }
+
     }
 
     private void parseCookie(String value) {

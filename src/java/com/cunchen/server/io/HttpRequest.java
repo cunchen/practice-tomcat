@@ -24,7 +24,7 @@ public class HttpRequest implements ServletRequest {
 
     private SocketInputStream input ;
 
-    private String uri;
+    private String uri = "";
 
     /**
      * 请求问号后边的参数
