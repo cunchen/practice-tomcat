@@ -8,6 +8,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.Locale;
 
 /**
@@ -22,6 +23,13 @@ public class HttpResponse implements ServletResponse {
     private HttpRequest request;
 
     private PrintWriter writer;
+
+    private Charset charset;
+
+    private final String head = "HTTP/1.1 200 OK\r\n" +
+            "Content-Type: text/html\r\n" +
+//            "Content-Length: 60\n\n" +
+            "\r\n" ;
 
     public HttpResponse(OutputStream outputStream) {
         this.outputStream = outputStream;
@@ -43,11 +51,13 @@ public class HttpResponse implements ServletResponse {
         File file = new File(Constants.WEB_ROOT, request.getUri());
         try {
             if(file.isFile()) {
+                writer = getWriter();
                 fis = new FileInputStream(file);
                 int ch = fis.read(bytes, 0, BUFFER_SIZE);
                 while (ch != -1) {
-                    outputStream.write(bytes, 0, ch);
                     ch = fis.read(bytes, 0, BUFFER_SIZE);
+                    String body = new String(bytes);
+                    outputStream.write((head + body).getBytes());
                 }
             } else {
                 String errorMessage = "HTTP/1.1 404 File Not Found\r\n" +
@@ -74,7 +84,7 @@ public class HttpResponse implements ServletResponse {
 
     @Override
     public String getCharacterEncoding() {
-        return null;
+        return "utf-8";
     }
 
     @Override
