@@ -1,38 +1,75 @@
 package com.cunchen.server.io;
 
+import com.cunchen.Constants;
 import com.cunchen.connector.ResponseStream;
 import com.cunchen.connector.ResponseWriter;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Locale;
 
 /**
  * Response
  * Created by wqd on 2016/12/29.
  */
-public class HttpResponse extends Response implements ServletResponse {
+public class HttpResponse implements ServletResponse {
+
+    private final static int BUFFER_SIZE = 2048;
 
     private OutputStream outputStream;
-    private ServletRequest request;
+    private HttpRequest request;
 
     private PrintWriter writer;
 
     public HttpResponse(OutputStream outputStream) {
-        super(outputStream);
         this.outputStream = outputStream;
     }
 
-    public void setRequest(ServletRequest request) {
+    public void setRequest(HttpRequest request) {
         this.request = request;
     }
 
     public void setHeader(String server, String s) {
+    }
+
+
+    public void sendStaticResource() {
+        byte[] bytes = new byte[BUFFER_SIZE];
+        FileInputStream fis = null;
+        if(request == null)
+            return;
+        File file = new File(Constants.WEB_ROOT, request.getUri());
+        try {
+            if(file.isFile()) {
+                fis = new FileInputStream(file);
+                int ch = fis.read(bytes, 0, BUFFER_SIZE);
+                while (ch != -1) {
+                    outputStream.write(bytes, 0, ch);
+                    ch = fis.read(bytes, 0, BUFFER_SIZE);
+                }
+            } else {
+                String errorMessage = "HTTP/1.1 404 File Not Found\r\n" +
+                        "Content-Type: text/html\r\n" +
+                        "Content-Length: 23\n\n" +
+                        "\r\n" +
+                        "<h1>File Not Found</h1>";
+                outputStream.write(errorMessage.getBytes());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if( fis != null)
+                    fis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return;
     }
 
     @Override
@@ -47,7 +84,7 @@ public class HttpResponse extends Response implements ServletResponse {
 
     @Override
     public ServletOutputStream getOutputStream() throws IOException {
-        return (ServletOutputStream) request;
+        return (ServletOutputStream) outputStream;
     }
 
     /**

@@ -322,4 +322,12 @@ public class HttpRequest implements ServletRequest {
     public void addCookie(Cookie cookie) {
         cookies.add(cookie);
     }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public String getUri() {
+        return uri;
+    }
 }

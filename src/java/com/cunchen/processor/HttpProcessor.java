@@ -71,33 +71,36 @@ public class HttpProcessor {
 
     /**
      * Io流Request解析
-     * @param input 输入流
+     *
+     * @param input  输入流
      * @param output 输出流
      */
     private void parseRequest(SocketInputStream input, OutputStream output) throws ServletException {
         input.readRequestLine(requestLine);
         String method = new String(requestLine.method, 0, requestLine.methodEnd);
 
-        if(method.length() < 1) {
+        if (method.length() < 1) {
             throw new ServletException("Missing HTTP request method");
-        } else if(requestLine.uriEnd < 1) {
-            throw  new ServletException("Missing HTTP request URI");
+        } else if (requestLine.uriEnd < 1) {
+            throw new ServletException("Missing HTTP request URI");
         }
 
         int question = requestLine.indexOf("?");
-        if(question >= 0) {
-            request.setQueryString(new String(requestLine.uri, question + 1, requestLine.uriEnd - question -1));
-            uri = new String(requestLine.uri, 0 , question);
+        if (question >= 0) {
+            request.setQueryString(new String(requestLine.uri, question + 1, requestLine.uriEnd - question - 1));
+            uri = new String(requestLine.uri, 0, question);
         } else {
             request.setQueryString(null);
-            uri = new String(requestLine.uri, 0 , requestLine.uriEnd);
+            uri = new String(requestLine.uri, 0, requestLine.uriEnd);
         }
 
+        request.setUri(uri);
+
         //Checking for an absolute URI
-        if(!uri.startsWith("/")) {
+        if (!uri.startsWith("/")) {
             int pos = uri.indexOf("://");
             //Parsing out protocol and hsot name
-            if(pos != -1) {
+            if (pos != -1) {
                 uri = "";
             } else {
                 uri = uri.substring(pos);
@@ -108,7 +111,7 @@ public class HttpProcessor {
             if (semicolon >= 0) {
                 String rest = uri.substring(semicolon + match.length());
                 int semicolon2 = rest.indexOf(';');
-                if(semicolon2 >= 0) {
+                if (semicolon2 >= 0) {
                     request.setRequestedSessionId(rest.substring(0, semicolon2));
                     rest = rest.substring(semicolon2);
                 } else {
@@ -128,13 +131,13 @@ public class HttpProcessor {
             //Set the corresponding request properties
             ((HttpRequest) request).setMethod(method);
             request.setProtocol(protocol);
-            if(normalizedUri != null) {
+            if (normalizedUri != null) {
                 ((HttpRequest) request).setRequestURI(normalizedUri);
             } else {
                 ((HttpRequest) request).setRequestURI(uri);
             }
 
-            if(normalizedUri == null) {
+            if (normalizedUri == null) {
                 throw new ServletException("Invalid URI: " + uri + "'");
             }
         }
@@ -201,5 +204,9 @@ public class HttpProcessor {
             }
             request.addCookie(cookies[i]);
         }
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 }

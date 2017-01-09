@@ -7,7 +7,9 @@ import java.io.File;
  * Created by wqd on 2016/12/26.
  */
 public class Constants {
-    public final static String WEB_ROOT = Constants.class.getClassLoader().getResource("").getFile();
+//    public final static String WEB_ROOT = Constants.class.getClassLoader().getResource("").getFile();
+
+    public final static String WEB_ROOT = System.getProperty("user.dir") + File.separator + "src" + File.separator + "webroot";
 
     //punctuation ?
     public final static String PUNCATUATION_QUESTION = "?";
