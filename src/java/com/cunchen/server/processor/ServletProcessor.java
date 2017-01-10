@@ -51,13 +51,11 @@ public class ServletProcessor {
         }
 
         Servlet servlet = null;
-        RequestFacade requestFacade = new RequestFacade(request);
-        ResponseFacade responseFacade = new ResponseFacade(response);
         try {
             servlet = (Servlet) myClass.newInstance();
             HttpRequestFacde requestFacde = new HttpRequestFacde(request);
-            HttpResponseFacde responseFacde = new HttpResponseFacde();
-            servlet.service(requestFacade, responseFacade);
+            HttpResponseFacde responseFacde = new HttpResponseFacde(response);
+            servlet.service(requestFacde, responseFacde);
             ((HttpResponse) response).finishResponse();
         } catch (ServletException | IOException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();

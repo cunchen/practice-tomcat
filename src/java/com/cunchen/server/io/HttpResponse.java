@@ -26,10 +26,16 @@ public class HttpResponse implements ServletResponse {
 
     private Charset charset;
 
-    private final String head = "HTTP/1.1 200 OK\r\n" +
+    private final String HEAD = "HTTP/1.1 200 OK\r\n" +
             "Content-Type: text/html\r\n" +
 //            "Content-Length: 60\n\n" +
             "\r\n" ;
+
+    private final String PAGE_404 = "HTTP/1.1 404 File Not Found\r\n" +
+            "Content-Type: text/html\r\n" +
+            "Content-Length: 30\n\n" +
+            "\r\n" +
+            "<h1>找不到小仙女啦~_~</h1>";
 
     public HttpResponse(OutputStream outputStream) {
         this.outputStream = outputStream;
@@ -51,21 +57,17 @@ public class HttpResponse implements ServletResponse {
         File file = new File(Constants.WEB_ROOT, request.getUri());
         try {
             if(file.isFile()) {
-//                writer = getWriter();
                 fis = new FileInputStream(file);
                 int ch = fis.read(bytes, 0, BUFFER_SIZE);
                 while (ch != -1) {
                     ch = fis.read(bytes, 0, BUFFER_SIZE);
                     String body = new String(bytes);
-                    outputStream.write((head + body).getBytes());
+                    outputStream.write((HEAD + body).getBytes());
                 }
             } else {
-                String errorMessage = "HTTP/1.1 404 File Not Found\r\n" +
-                        "Content-Type: text/html\r\n" +
-                        "Content-Length: 30\n\n" +
-                        "\r\n" +
-                        "<h1>找不到小仙女啦~_~</h1>";
-                outputStream.write(errorMessage.getBytes());
+                writer = new ResponseWriter(new OutputStreamWriter(outputStream,getCharacterEncoding()));
+                writer.write(PAGE_404);
+                writer.flush();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -84,7 +86,7 @@ public class HttpResponse implements ServletResponse {
 
     @Override
     public String getCharacterEncoding() {
-        return "utf-8";
+        return "UTF-8";
     }
 
     @Override
@@ -94,7 +96,7 @@ public class HttpResponse implements ServletResponse {
 
     @Override
     public ServletOutputStream getOutputStream() throws IOException {
-        return (ServletOutputStream) outputStream;
+        return new ResponseStream(outputStream);
     }
 
     /**
@@ -104,10 +106,9 @@ public class HttpResponse implements ServletResponse {
      */
     @Override
     public PrintWriter getWriter() throws IOException {
-        ResponseStream newStream = new ResponseStream(this);
-        newStream.setCommit(false);
-        OutputStreamWriter osr = new OutputStreamWriter(newStream, getCharacterEncoding());
+        OutputStreamWriter osr = new OutputStreamWriter(outputStream, getCharacterEncoding());
         this.writer = new ResponseWriter(osr);
+        writer.write(HEAD);
         return writer;
     }
 
@@ -167,6 +168,19 @@ public class HttpResponse implements ServletResponse {
     }
 
     public void finishResponse() {
+        if(writer != null) {
+            writer.flush();
+            writer.close();
+        }
+
+        try {
+            if(outputStream != null) {
+                outputStream.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
 }

@@ -8,8 +8,6 @@ import java.io.*;
  * Created by wqd on 2017/1/5.
  */
 public class ResponseWriter extends PrintWriter{
-
-
     public ResponseWriter(Writer out) {
         super(out);
     }
@@ -40,10 +38,5 @@ public class ResponseWriter extends PrintWriter{
 
     public ResponseWriter(File file, String csn) throws FileNotFoundException, UnsupportedEncodingException {
         super(file, csn);
-    }
-
-    public PrintWriter getWriter() {
-        
-        return null;
     }
 }
