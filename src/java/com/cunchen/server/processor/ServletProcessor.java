@@ -59,13 +59,7 @@ public class ServletProcessor {
             HttpResponseFacde responseFacde = new HttpResponseFacde();
             servlet.service(requestFacade, responseFacade);
             ((HttpResponse) response).finishResponse();
-        } catch (ServletException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (ServletException | IOException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }

@@ -33,13 +33,18 @@ public class SocketInputStream {
      * protocol 请求协议
      * @param requestLine requestLine POJO类
      */
-    public void readRequestLine(RequestLine requestLine) {
+    public void readRequestLine(RequestLine requestLine) throws NullPointerException {
         try {
             String line = streamReader.readLine();
 
-            requestLine.setRequestString(line);
+            String[] results = null;
+            if(line != null) {
+                requestLine.setRequestString(line);
 
-            String[] results = line.split(Constants.PUNCATUATION_BLACK);
+                results = line.split(Constants.PUNCATUATION_BLACK);
+            } else {
+                throw new NullPointerException("Request header empty error!");
+            }
 
             if(results.length != 3) {
                 throw new ServletException("The request header is error!");
@@ -54,9 +59,7 @@ public class SocketInputStream {
                 requestLine.setProtocoEnd(results[2].length());
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ServletException e) {
+        } catch (IOException | ServletException e) {
             e.printStackTrace();
         }
     }

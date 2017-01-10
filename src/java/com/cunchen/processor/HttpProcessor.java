@@ -61,10 +61,7 @@ public class HttpProcessor {
 
             socket.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ServletException e) {
-
+        } catch (IOException | ServletException | NullPointerException e ) {
             e.printStackTrace();
         }
     }
@@ -75,7 +72,7 @@ public class HttpProcessor {
      * @param input  输入流
      * @param output 输出流
      */
-    private void parseRequest(SocketInputStream input, OutputStream output) throws ServletException {
+    private void parseRequest(SocketInputStream input, OutputStream output) throws ServletException, NullPointerException {
         input.readRequestLine(requestLine);
         String method = new String(requestLine.method, 0, requestLine.methodEnd);
 

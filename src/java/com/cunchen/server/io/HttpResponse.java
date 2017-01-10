@@ -51,7 +51,7 @@ public class HttpResponse implements ServletResponse {
         File file = new File(Constants.WEB_ROOT, request.getUri());
         try {
             if(file.isFile()) {
-                writer = getWriter();
+//                writer = getWriter();
                 fis = new FileInputStream(file);
                 int ch = fis.read(bytes, 0, BUFFER_SIZE);
                 while (ch != -1) {
@@ -62,9 +62,9 @@ public class HttpResponse implements ServletResponse {
             } else {
                 String errorMessage = "HTTP/1.1 404 File Not Found\r\n" +
                         "Content-Type: text/html\r\n" +
-                        "Content-Length: 23\n\n" +
+                        "Content-Length: 30\n\n" +
                         "\r\n" +
-                        "<h1>File Not Found</h1>";
+                        "<h1>找不到小仙女啦~_~</h1>";
                 outputStream.write(errorMessage.getBytes());
             }
         } catch (FileNotFoundException e) {
