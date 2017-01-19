@@ -3,6 +3,7 @@ package com.cunchen.util;
 import org.apache.catalina.util.ParameterMap;
 
 import javax.servlet.http.Cookie;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 /**
@@ -46,8 +47,9 @@ public class RequestUtil {
         return ((Cookie[]) cookies.toArray(new Cookie[cookies.size()]));
     }
 
-    //TODO
     public static String parseParameters(ParameterMap results, String queryString, String encoding) {
+
+        Charset charset = Charset.forName(encoding);
 
         return null;
     }
