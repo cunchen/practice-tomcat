@@ -1,4 +1,4 @@
-package com.cunchen.processor;
+package com.cunchen.connector;
 
 import com.cunchen.connector.HttpConnector;
 import com.cunchen.server.header.HttpHeader;
@@ -15,14 +15,16 @@ import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 /**
  * Http解析器
  * Created by wqd on 2016/12/28.
  */
-public class HttpProcessor {
+public class HttpProcessor implements Runnable {
 
-    private HttpConnector httpConnector ;
+    private static final Logger log = Logger.getLogger(HttpProcessor.class.getName());
+
     private HttpRequest request;
     private HttpResponse response;
 
@@ -30,10 +32,23 @@ public class HttpProcessor {
     private String uri;
     private String protocol;
 
-    private RequestLine requestLine = new RequestLine();
+    private RequestLine requestLine;
+
+
+    private boolean available;                  //线程可用
+    private Socket socket;                      //当前线程
+
+    private int debug;
+
+    private HttpConnector connector;
+
+    private HttpProcessor threadSync;
 
     public HttpProcessor(HttpConnector httpConnector) {
-        this.httpConnector = httpConnector;
+        this.available = false;
+        this.requestLine = new RequestLine();
+        this.connector = httpConnector;
+        this.threadSync = this;
     }
 
     public void process(Socket socket) {
@@ -205,5 +220,71 @@ public class HttpProcessor {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    /**
+     * TODO
+     * 请求
+     * @param socket
+     */
+    synchronized void assign(Socket socket) {
+
+        while(available) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        this.socket = socket;
+        available = true;
+        notifyAll();
+    }
+
+    /**
+     * HttpProcessor run方法
+     */
+    @Override
+    public void run() {
+        boolean stopped = false;
+        while(!stopped) {
+            Socket socket = await();
+            if(socket == null)
+                continue;
+            try {
+                process(socket);
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+
+            connector.recycle(this);
+        }
+
+        synchronized (threadSync) {
+            threadSync.notifyAll();
+        }
+    }
+
+    /**
+     * 等待Connector提供一个新Socket
+     * @return
+     */
+    private synchronized Socket await() {
+        while(!available) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        //通知连接器已经接收到Socket
+        Socket socket = this.socket;
+        available = false;
+        notifyAll();
+        if((debug >= 1) && (socket != null))
+            log.info("The incoming request has been awaited");
+        return socket;
+
     }
 }
