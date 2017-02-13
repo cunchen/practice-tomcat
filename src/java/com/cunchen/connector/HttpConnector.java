@@ -26,7 +26,9 @@ public class HttpConnector implements Runnable{
     private int maxProcessors = 20;     //最大连接数,若取负数，则无上限
     private int curProcessors = 0;      //当前连接数
 
-    private Stack<HttpProcessor> processors ;
+    private Stack<HttpProcessor> processors;    //Processor连接池
+
+    private int bufferSize;                     //缓冲区大小
 
     public String getScheme() {
         return scheme;
@@ -103,5 +105,9 @@ public class HttpConnector implements Runnable{
         AbstractEndpoint<?> endPoint = null;
         DefaultServerSocketFactory dsf = new DefaultServerSocketFactory(endPoint);
         return dsf.createSocket(port, backlog, ifAddress);
+    }
+
+    public int getBufferSize() {
+        return bufferSize;
     }
 }

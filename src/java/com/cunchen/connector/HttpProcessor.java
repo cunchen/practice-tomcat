@@ -52,12 +52,19 @@ public class HttpProcessor implements Runnable {
     }
 
     public void process(Socket socket) {
+
+        boolean ok, finishResponse, keepAlive, stopped, http11;
+
         SocketInputStream input = null;
         OutputStream output = null;
         try {
-            input = new SocketInputStream(socket.getInputStream(), 2048);
+            input = new SocketInputStream(socket.getInputStream(), connector.getBufferSize());
             request = new HttpRequest(input);
+        } catch (Exception e) {
+            ok = false;
+        }
 
+        try {
             output = socket.getOutputStream();
             response = new HttpResponse(output);
             response.setRequest(request);
