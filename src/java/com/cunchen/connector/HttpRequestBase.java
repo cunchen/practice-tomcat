@@ -1,6 +1,7 @@
 package com.cunchen.connector;
 
 import com.cunchen.HttpRequest;
+import com.cunchen.server.io.SocketInputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -13,6 +14,8 @@ import java.util.Enumeration;
  * Created by wqd on 2017/2/13.
  */
 public class HttpRequestBase extends RequestBase implements HttpRequest,HttpServletRequest {
+
+    private SocketInputStream stream;
 
     @Override
     public String getAuthType() {
@@ -162,5 +165,9 @@ public class HttpRequestBase extends RequestBase implements HttpRequest,HttpServ
     @Override
     public Part getPart(String s) throws IOException, IllegalStateException, ServletException {
         return null;
+    }
+
+    public void setStream(SocketInputStream stream) {
+        this.stream = stream;
     }
 }

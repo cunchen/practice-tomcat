@@ -3,6 +3,8 @@ package com.cunchen.connector;
 import org.apache.tomcat.util.net.AbstractEndpoint;
 import org.apache.tomcat.util.net.DefaultServerSocketFactory;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -29,6 +31,16 @@ public class HttpConnector implements Runnable{
     private Stack<HttpProcessor> processors;    //Processor连接池
 
     private int bufferSize;                     //缓冲区大小
+
+    /**
+     * The proxy server name for our Connector.
+     */
+    private String proxyName;
+
+    /**
+     * The proxy server port for our Connector.
+     */
+    private String proxyPort;
 
     public String getScheme() {
         return scheme;
@@ -109,5 +121,33 @@ public class HttpConnector implements Runnable{
 
     public int getBufferSize() {
         return bufferSize;
+    }
+
+    public String getProxyName() {
+        return proxyName;
+    }
+
+    public String getProxyPort() {
+        return proxyPort;
+    }
+
+    /**
+     * TODO
+     * @return NULL
+     */
+    public HttpServletRequest createRequest() {
+        return null;
+    }
+
+    /**
+     * TODO
+     * @return null
+     */
+    public HttpServletResponse createResponse() {
+        return null;
+    }
+
+    public int getPort() {
+        return port;
     }
 }

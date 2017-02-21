@@ -43,6 +43,10 @@ public class HttpRequest implements ServletRequest {
 
     //标记是否已被解析
     private boolean parsed;
+    private HttpResponse response;
+
+    public HttpRequest() {
+    }
 
     public HttpRequest(SocketInputStream input) {
         this.input = input;
@@ -329,5 +333,13 @@ public class HttpRequest implements ServletRequest {
 
     public String getUri() {
         return uri;
+    }
+
+    public void setStream(SocketInputStream stream) {
+        this.input = stream;
+    }
+
+    public void setResponse(HttpResponse response) {
+        this.response = response;
     }
 }

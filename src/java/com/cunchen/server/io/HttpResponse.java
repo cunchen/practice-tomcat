@@ -37,6 +37,9 @@ public class HttpResponse implements ServletResponse {
             "\r\n" +
             "<h1>找不到小仙女啦~_~</h1>";
 
+    public HttpResponse() {
+    }
+
     public HttpResponse(OutputStream outputStream) {
         this.outputStream = outputStream;
     }
@@ -182,5 +185,9 @@ public class HttpResponse implements ServletResponse {
         }
 
 
+    }
+
+    public void setStream(OutputStream stream) {
+        this.outputStream = stream;
     }
 }

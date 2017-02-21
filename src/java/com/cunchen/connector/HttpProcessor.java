@@ -25,48 +25,117 @@ public class HttpProcessor implements Runnable {
 
     private static final Logger log = Logger.getLogger(HttpProcessor.class.getName());
 
-    private HttpRequest request;
-    private HttpResponse response;
+    /**
+     * The identifier of this processor, unique per connector.
+     */
+    private int id = 0;
 
+
+    private HttpRequestImpl request;
+    private HttpResponseImpl response;
 
     private String uri;
-    private String protocol;
 
+
+    private String protocol;
     private RequestLine requestLine;
 
-
-    private boolean available;                  //线程可用
     private Socket socket;                      //当前线程
 
-    private int debug;
 
+    private int debug;
     private HttpConnector connector;
 
-    private HttpProcessor threadSync;
+    /**
+     * The name to register for the background thread.
+     */
+    private String threadName;
+    /**
+     * The actual server port for our Connector.
+     */
+    private int severPort;
 
-    public HttpProcessor(HttpConnector httpConnector) {
-        this.available = false;
+    /**
+     * The proxy server name for our Connector.
+     */
+    private String proxyName;
+
+    /**
+     * The proxy server port for our Connector.
+     */
+    private String proxyPort;
+
+    /**
+     * The thread synchronization object.
+     */
+    private Object threadSync = new Object();
+
+    /**
+     * Is there a new socket available?
+     */
+    private boolean available = false;                  //线程可用
+
+    /**
+     * Keep alive indicator.
+     */
+    private boolean keepAlive = false;
+
+    /**
+     * The shutdown signal to our background thread
+     */
+    private boolean stopped = false;
+
+    public HttpProcessor(HttpConnector connector) {
+
+        super();
+
+        this.connector = connector;
         this.requestLine = new RequestLine();
-        this.connector = httpConnector;
-        this.threadSync = this;
     }
 
-    public void process(Socket socket) {
+    public HttpProcessor(HttpConnector connector, int id) {
 
-        boolean ok, finishResponse, keepAlive, stopped, http11;
+        super();
+        this.connector = connector;
+
+        this.id = id;
+        this.proxyName = connector.getProxyName();
+        this.proxyPort = connector.getProxyPort();
+        this.request = (HttpRequestImpl)connector.createRequest();
+        this.response = (HttpResponseImpl)connector.createResponse();
+
+        this.severPort = connector.getPort();
+        this.threadName = "HttpProcessor[" + connector.getPort() + "][" + id + "]";
+    }
+
+    private void process(Socket socket) {
+
+
+        boolean ok = true;
+        boolean finishResponse = true;
 
         SocketInputStream input = null;
         OutputStream output = null;
+
         try {
             input = new SocketInputStream(socket.getInputStream(), connector.getBufferSize());
-            request = new HttpRequest(input);
         } catch (Exception e) {
             ok = false;
         }
 
+        keepAlive = true;
+
+        while(!stopped && ok && keepAlive) {
+
+        }
+
         try {
+
+            request.setStream(input);
+            request.setResponse(response);
+
             output = socket.getOutputStream();
-            response = new HttpResponse(output);
+            response.setStream(output);
             response.setRequest(request);
             response.setHeader("Server", "Pyrmont Servlet Container");
 
