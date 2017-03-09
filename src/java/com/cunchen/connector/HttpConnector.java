@@ -46,9 +46,16 @@ public class HttpConnector implements Runnable{
         return scheme;
     }
 
+    /**
+     * 连接器连接操作
+     * 创建ServerSocket
+     * 接入请求
+     * 调用Prossor进行处理
+     */
     public void run() {
         ServerSocket serverSocket = null;
         int port = 8080;
+        //创建ServerSocket
         try {
             serverSocket = new ServerSocket(port, 1, InetAddress.getByName("localhost"));
         } catch (IOException e) {
@@ -56,6 +63,7 @@ public class HttpConnector implements Runnable{
             System.exit(1);
         }
 
+        //若非终止参数，则循环接入请求
         while (!stopped) {
             Socket socket = null;
             try {
