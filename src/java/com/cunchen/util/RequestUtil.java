@@ -1,7 +1,5 @@
 package com.cunchen.util;
 
-import org.apache.catalina.util.ParameterMap;
-
 import javax.servlet.http.Cookie;
 import java.nio.charset.Charset;
 import java.util.ArrayList;

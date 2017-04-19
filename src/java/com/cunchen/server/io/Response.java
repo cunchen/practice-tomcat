@@ -1,7 +1,6 @@
 package com.cunchen.server.io;
 
 import com.cunchen.Constants;
-import com.cunchen.HttpServer;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
@@ -9,6 +8,7 @@ import java.io.*;
 import java.util.Locale;
 
 /**
+ * Response
  * Created by wqd on 2016/12/26.
  */
 public class Response implements ServletResponse {

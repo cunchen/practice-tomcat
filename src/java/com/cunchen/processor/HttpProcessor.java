@@ -20,7 +20,7 @@ import java.net.Socket;
  * Http解析器
  * Created by wqd on 2016/12/28.
  */
-public class HttpProcessor {
+public class HttpProcessor implements Runnable {
 
     private HttpConnector httpConnector ;
     private HttpRequest request;
@@ -32,8 +32,18 @@ public class HttpProcessor {
 
     private RequestLine requestLine = new RequestLine();
 
-    public HttpProcessor(HttpConnector httpConnector) {
+    //是否有新socket接入
+    private boolean available;
+
+    //多线程ID
+    private final int id ;
+
+    //Socket
+    private Socket scoket;
+
+    public HttpProcessor(HttpConnector httpConnector, int id) {
         this.httpConnector = httpConnector;
+        this.id = id;
     }
 
     public void process(Socket socket) {
@@ -205,5 +215,54 @@ public class HttpProcessor {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    /**
+     * 工作委派
+     * @param socket
+     */
+    public synchronized void assign(Socket socket) {
+        /**
+         * 判断是否有新socket接入
+         * 如果有新socket，进入work等待
+         */
+        while (available) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+
+            }
+        }
+        this.scoket = socket;
+        available = true;
+        notifyAll();
+        process(this.scoket);
+    }
+
+    /**
+     * work等待
+     * @return
+     */
+    private synchronized Socket await() {
+        /**
+         * 若无新socket接入
+         * 则等待
+         */
+        while(!available) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        Socket socket = this.scoket;
+        available = false;
+        notifyAll();
+        return socket;
+    }
+
+    @Override
+    public void run() {
+
     }
 }

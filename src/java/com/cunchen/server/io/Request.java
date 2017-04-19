@@ -53,156 +53,132 @@ public class Request implements ServletRequest {
     }
 
 
-    /**
-     * Get the uri String
-     * It have to have been executed parse().
-     * @return uri String
-     */
-    public String getUri() {
-        return uri;
-    }
-
+    @Override
     public Object getAttribute(String s) {
         return null;
     }
 
+    @Override
     public Enumeration getAttributeNames() {
         return null;
     }
 
+    @Override
     public String getCharacterEncoding() {
         return null;
     }
 
+    @Override
     public void setCharacterEncoding(String s) throws UnsupportedEncodingException {
 
     }
 
+    @Override
     public int getContentLength() {
         return 0;
     }
 
+    @Override
     public String getContentType() {
         return null;
     }
 
+    @Override
     public ServletInputStream getInputStream() throws IOException {
         return null;
     }
 
+    @Override
     public String getParameter(String s) {
         return null;
     }
 
+    @Override
     public Enumeration getParameterNames() {
         return null;
     }
 
+    @Override
     public String[] getParameterValues(String s) {
         return new String[0];
     }
 
+    @Override
     public Map getParameterMap() {
         return null;
     }
 
+    @Override
     public String getProtocol() {
         return null;
     }
 
+    @Override
     public String getScheme() {
         return null;
     }
 
+    @Override
     public String getServerName() {
         return null;
     }
 
+    @Override
     public int getServerPort() {
         return 0;
     }
 
+    @Override
     public BufferedReader getReader() throws IOException {
         return null;
     }
 
+    @Override
     public String getRemoteAddr() {
         return null;
     }
 
+    @Override
     public String getRemoteHost() {
         return null;
     }
 
+    @Override
     public void setAttribute(String s, Object o) {
 
     }
 
+    @Override
     public void removeAttribute(String s) {
 
     }
 
+    @Override
     public Locale getLocale() {
         return null;
     }
 
+    @Override
     public Enumeration getLocales() {
         return null;
     }
 
+    @Override
     public boolean isSecure() {
         return false;
     }
 
+    @Override
     public RequestDispatcher getRequestDispatcher(String s) {
         return null;
     }
 
+    @Override
     public String getRealPath(String s) {
         return null;
     }
 
-    public int getRemotePort() {
-        return 0;
-    }
-
-    public String getLocalName() {
-        return null;
-    }
-
-    public String getLocalAddr() {
-        return null;
-    }
-
-    public int getLocalPort() {
-        return 0;
-    }
-
-    public ServletContext getServletContext() {
-        return null;
-    }
-
-    public AsyncContext startAsync() {
-        return null;
-    }
-
-    public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) {
-        return null;
-    }
-
-    public boolean isAsyncStarted() {
-        return false;
-    }
-
-    public boolean isAsyncSupported() {
-        return false;
-    }
-
-    public AsyncContext getAsyncContext() {
-        return null;
-    }
-
-    public DispatcherType getDispatcherType() {
-        return null;
+    public String getUri() {
+        return uri;
     }
 }

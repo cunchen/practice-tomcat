@@ -1,14 +1,13 @@
 package com.cunchen.util;
 
-import org.apache.tomcat.util.res.StringManager;
-
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * ParameterMap
  * Created by wqd on 2017/1/4.
  */
-public final class ParameterMap extends HashMap {
+public final class ParameterMap<K,V> extends HashMap<K,V> {
 
     public ParameterMap() {
         super();
@@ -32,8 +31,8 @@ public final class ParameterMap extends HashMap {
         return this.locked;
     }
 
-    public void setLocaked(boolean locaked) {
-        this.locked = locaked;
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
     private static final StringManager sm = StringManager.getManager("org.apache.catalina.util");
@@ -44,7 +43,7 @@ public final class ParameterMap extends HashMap {
         super.clear();
     }
 
-    public Object put(Object key, Object value) {
+    public V put(K key, V value) {
         if(locked)
             throw new IllegalStateException(sm.getString("parameterMap.locked"));
         return super.put(key, value);
@@ -56,7 +55,7 @@ public final class ParameterMap extends HashMap {
         super.putAll(map);
     }
 
-    public Object remove(Object key) {
+    public V remove(Object key) {
         if(locked)
             throw new IllegalStateException(sm.getString("parameterMap.locked"));
         return super.remove(key);

@@ -1,14 +1,17 @@
 package com.cunchen.server.io;
 
+import com.cunchen.util.ParameterMap;
 import com.cunchen.util.RequestUtil;
-import org.apache.catalina.util.ParameterMap;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Http请求类
@@ -214,62 +217,6 @@ public class HttpRequest implements ServletRequest {
     public String getRealPath(String s) {
         return null;
     }
-
-    @Override
-    public int getRemotePort() {
-        return 0;
-    }
-
-    @Override
-    public String getLocalName() {
-        return null;
-    }
-
-    @Override
-    public String getLocalAddr() {
-        return null;
-    }
-
-    @Override
-    public int getLocalPort() {
-        return 0;
-    }
-
-    @Override
-    public ServletContext getServletContext() {
-        return null;
-    }
-
-    @Override
-    public AsyncContext startAsync() {
-        return null;
-    }
-
-    @Override
-    public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) {
-        return null;
-    }
-
-    @Override
-    public boolean isAsyncStarted() {
-        return false;
-    }
-
-    @Override
-    public boolean isAsyncSupported() {
-        return false;
-    }
-
-    @Override
-    public AsyncContext getAsyncContext() {
-        return null;
-    }
-
-    @Override
-    public DispatcherType getDispatcherType() {
-        return null;
-    }
-
 
     public void setQueryString(String queryString) {
         this.queryString = queryString;

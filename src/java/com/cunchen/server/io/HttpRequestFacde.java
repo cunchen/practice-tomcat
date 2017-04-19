@@ -145,58 +145,5 @@ public class HttpRequestFacde implements ServletRequest {
         return null;
     }
 
-    @Override
-    public int getRemotePort() {
-        return 0;
-    }
 
-    @Override
-    public String getLocalName() {
-        return null;
-    }
-
-    @Override
-    public String getLocalAddr() {
-        return null;
-    }
-
-    @Override
-    public int getLocalPort() {
-        return 0;
-    }
-
-    @Override
-    public ServletContext getServletContext() {
-        return null;
-    }
-
-    @Override
-    public AsyncContext startAsync() {
-        return null;
-    }
-
-    @Override
-    public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) {
-        return null;
-    }
-
-    @Override
-    public boolean isAsyncStarted() {
-        return false;
-    }
-
-    @Override
-    public boolean isAsyncSupported() {
-        return false;
-    }
-
-    @Override
-    public AsyncContext getAsyncContext() {
-        return null;
-    }
-
-    @Override
-    public DispatcherType getDispatcherType() {
-        return null;
-    }
 }

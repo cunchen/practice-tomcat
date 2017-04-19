@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.util.Locale;
 
 /**
+ * ResponseFacade
  * Created by wqd on 2016/12/28.
  */
 public class ResponseFacade implements ServletResponse {
@@ -23,10 +24,6 @@ public class ResponseFacade implements ServletResponse {
         return response.getCharacterEncoding();
     }
 
-    @Override
-    public String getContentType() {
-        return response.getContentType();
-    }
 
     @Override
     public ServletOutputStream getOutputStream() throws IOException {
@@ -38,10 +35,6 @@ public class ResponseFacade implements ServletResponse {
         return response.getWriter();
     }
 
-    @Override
-    public void setCharacterEncoding(String s) {
-        response.setCharacterEncoding(s);
-    }
 
     @Override
     public void setContentLength(int i) {
