@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
+ * HttpConnector
  * Created by wqd on 2016/12/28.
  */
 public class HttpConnector implements Runnable{
@@ -15,6 +16,8 @@ public class HttpConnector implements Runnable{
     boolean stopped;
 
     private final String scheme = "http";
+
+    Object threadSync;
 
     public String getScheme() {
         return scheme;
@@ -35,17 +38,32 @@ public class HttpConnector implements Runnable{
             try {
                 socket = serverSocket.accept();
 
-                //判断是否由于端口映射造成的二次访问
-                if(socket.getLocalPort() != port)
+                //判断是否由于端口映射造成的二次访问以及socket空问题
+                if(socket.getLocalPort() != port || socket == null)
                     continue;
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            HttpProcessor processor = new HttpProcessor(this);
-            processor.process(socket);
+            try {
+                process(socket);
+            } catch (Throwable t) {
+                System.out.println("process.invoke");;
+            }
+
+            connector.recycle(this);
+
+            synchronized (threadSync) {
+                threadSync.notifyAll();
+            }
         }
+
+    }
+
+
+    private void process(Socket socket) {
+
     }
 
     public void start() {

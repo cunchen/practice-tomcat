@@ -8,6 +8,10 @@ import com.cunchen.connector.HttpConnector;
  */
 public class Bootstrap {
 
+    /**
+     * 启动
+     * @param args
+     */
     public static void main(String[] args) {
         HttpConnector httpConnector = new HttpConnector();
         httpConnector.start();
