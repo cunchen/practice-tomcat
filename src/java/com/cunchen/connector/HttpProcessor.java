@@ -1,6 +1,5 @@
-package com.cunchen.processor;
+package com.cunchen.connector;
 
-import com.cunchen.connector.HttpConnector;
 import com.cunchen.server.header.HttpHeader;
 import com.cunchen.server.io.HttpRequest;
 import com.cunchen.server.io.HttpResponse;
@@ -13,6 +12,7 @@ import com.cunchen.util.RequestUtil;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
@@ -50,7 +50,8 @@ public class HttpProcessor implements Runnable {
         SocketInputStream input = null;
         OutputStream output = null;
         try {
-            input = new SocketInputStream(socket.getInputStream(), 2048);
+            InputStream stream = socket.getInputStream();
+            input = new SocketInputStream(stream, 2048);
             request = new HttpRequest(input);
 
             output = socket.getOutputStream();
@@ -71,7 +72,7 @@ public class HttpProcessor implements Runnable {
 
             socket.close();
 
-        } catch (IOException | ServletException | NullPointerException e ) {
+        } catch (IOException | NullPointerException | ServletException e ) {
             e.printStackTrace();
         }
     }
@@ -82,7 +83,7 @@ public class HttpProcessor implements Runnable {
      * @param input  输入流
      * @param output 输出流
      */
-    private void parseRequest(SocketInputStream input, OutputStream output) throws ServletException, NullPointerException {
+    private void parseRequest(SocketInputStream input, OutputStream output) throws NullPointerException, ServletException {
         input.readRequestLine(requestLine);
         String method = new String(requestLine.method, 0, requestLine.methodEnd);
 
@@ -236,7 +237,6 @@ public class HttpProcessor implements Runnable {
         this.scoket = socket;
         available = true;
         notifyAll();
-        process(this.scoket);
     }
 
     /**
@@ -264,5 +264,16 @@ public class HttpProcessor implements Runnable {
     @Override
     public void run() {
 
+        while(!httpConnector.stopped) {
+
+            Socket socket = await();
+            if(socket == null)
+                continue;
+            try {
+                process(socket);
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
     }
 }

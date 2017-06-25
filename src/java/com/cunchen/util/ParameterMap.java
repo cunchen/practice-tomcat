@@ -1,5 +1,7 @@
 package com.cunchen.util;
 
+import org.apache.catalina.util.StringManager;
+
 import java.util.HashMap;
 import java.util.Map;
 

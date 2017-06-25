@@ -1,7 +1,5 @@
 package com.cunchen.connector;
 
-import com.cunchen.processor.HttpProcessor;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -123,6 +121,7 @@ public class HttpConnector implements Runnable{
     private HttpProcessor newProcessor() {
         HttpProcessor processor = new HttpProcessor(this, curProcessors++);
         processors.push(processor);
+        new Thread(processor).start();
         return processor;
     }
 
