@@ -37,10 +37,21 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+
 			</plugin>
 		</plugins>
+
+		<!-- 源码配置 -->
+		<sourceDirectory>src/java</sourceDirectory>
+
+		<!-- Resources 配置 -->
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/webroot</directory>
+			</resource>
+		</resources>
 	</build>
 
 
@@ -58,4 +69,5 @@
 			</properties>
 		</profile>
 	</profiles>
+
 </project>
