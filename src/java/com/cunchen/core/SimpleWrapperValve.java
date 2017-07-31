@@ -14,6 +14,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * SimpleSrapperValue
@@ -34,7 +35,7 @@ public class SimpleWrapperValve implements Valve, Contained {
      * @param response Resposne
      */
     @Override
-    public void invoke(Request request, Response response, ValveContext context)  {
+    public void invoke(Request request, Response response, ValveContext context) throws IOException {
         SimpleWrapper wrapper = (SimpleWrapper) getContainer();
         ServletRequest sreq = request.getRequest();
         ServletResponse sres = response.getResponse();

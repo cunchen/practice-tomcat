@@ -1,4 +1,4 @@
-package com.cunchen.server.io;
+package com.cunchen.connector;
 
 /**
  * 请求行包装类

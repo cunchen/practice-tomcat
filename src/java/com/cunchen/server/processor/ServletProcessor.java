@@ -1,12 +1,14 @@
 package com.cunchen.server.processor;
 
 import com.cunchen.Constants;
-import com.cunchen.server.io.*;
+import com.cunchen.connector.HttpRequest;
+import com.cunchen.connector.HttpRequestFacade;
+import com.cunchen.connector.HttpResponse;
+import com.cunchen.connector.HttpResponseFacade;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -53,8 +55,8 @@ public class ServletProcessor {
         Servlet servlet = null;
         try {
             servlet = (Servlet) myClass.newInstance();
-            HttpRequestFacde requestFacde = new HttpRequestFacde(request);
-            HttpResponseFacde responseFacde = new HttpResponseFacde(response);
+            HttpRequestFacade requestFacde = new HttpRequestFacade(request);
+            HttpResponseFacade responseFacde = new HttpResponseFacade((HttpServletResponse) response);
             servlet.service(requestFacde, responseFacde);
             ((HttpResponse) response).finishResponse();
         } catch (ServletException | IOException | InstantiationException | IllegalAccessException e) {

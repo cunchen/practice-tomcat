@@ -1,10 +1,6 @@
 package com.cunchen.connector;
 
 import com.cunchen.server.header.HttpHeader;
-import com.cunchen.server.io.HttpRequest;
-import com.cunchen.server.io.HttpResponse;
-import com.cunchen.server.io.RequestLine;
-import com.cunchen.server.io.SocketInputStream;
 import com.cunchen.server.processor.ServletProcessor;
 import com.cunchen.server.processor.StaticResourceProcessor;
 import com.cunchen.util.RequestUtil;

@@ -1,6 +1,7 @@
-package com.cunchen.server.io;
+package com.cunchen.connector;
 
 import com.cunchen.Constants;
+import com.cunchen.connector.RequestLine;
 import com.cunchen.server.header.HttpHeader;
 
 import javax.servlet.ServletException;

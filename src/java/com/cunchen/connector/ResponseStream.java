@@ -1,7 +1,5 @@
 package com.cunchen.connector;
 
-import com.cunchen.server.io.HttpResponse;
-
 import javax.servlet.ServletOutputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;

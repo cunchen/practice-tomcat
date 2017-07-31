@@ -2,10 +2,16 @@ package com.cunchen.connector;
 
 import com.cunchen.HttpResponse;
 import com.cunchen.Response;
+import org.apache.catalina.*;
+import org.apache.catalina.Request;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Collection;
 
 /**
@@ -99,22 +105,132 @@ public class HttpResponseBase extends ResponseBase implements HttpResponse, Http
     }
 
     @Override
-    public int getStatus() {
+    public Connector getConnector() {
+        return null;
+    }
+
+    @Override
+    public void setConnector(Connector connector) {
+
+    }
+
+    @Override
+    public int getContentCount() {
         return 0;
     }
 
     @Override
-    public String getHeader(String s) {
+    public Context getContext() {
         return null;
     }
 
     @Override
-    public Collection<String> getHeaders(String s) {
+    public void setContext(Context context) {
+
+    }
+
+    @Override
+    public void setAppCommitted(boolean appCommitted) {
+
+    }
+
+    @Override
+    public boolean isAppCommitted() {
+        return false;
+    }
+
+    @Override
+    public boolean getIncluded() {
+        return false;
+    }
+
+    @Override
+    public void setIncluded(boolean included) {
+
+    }
+
+    @Override
+    public String getInfo() {
         return null;
     }
 
     @Override
-    public Collection<String> getHeaderNames() {
+    public Request getRequest() {
         return null;
+    }
+
+    @Override
+    public void setRequest(Request request) {
+
+    }
+
+    @Override
+    public ServletResponse getResponse() {
+        return null;
+    }
+
+    @Override
+    public OutputStream getStream() {
+        return null;
+    }
+
+    @Override
+    public void setStream(OutputStream stream) {
+
+    }
+
+    @Override
+    public void setSuspended(boolean suspended) {
+
+    }
+
+    @Override
+    public boolean isSuspended() {
+        return false;
+    }
+
+    @Override
+    public void setError() {
+
+    }
+
+    @Override
+    public boolean isError() {
+        return false;
+    }
+
+    @Override
+    public ServletOutputStream createOutputStream() throws IOException {
+        return null;
+    }
+
+    @Override
+    public void finishResponse() throws IOException {
+
+    }
+
+    @Override
+    public int getContentLength() {
+        return 0;
+    }
+
+    @Override
+    public String getContentType() {
+        return null;
+    }
+
+    @Override
+    public PrintWriter getReporter() {
+        return null;
+    }
+
+    @Override
+    public void recycle() {
+
+    }
+
+    @Override
+    public void sendAcknowledgement() throws IOException {
+
     }
 }

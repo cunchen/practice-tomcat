@@ -1,13 +1,9 @@
 package com.cunchen.connector;
 
 import com.cunchen.HttpRequest;
-import com.cunchen.server.io.SocketInputStream;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.*;
-import java.io.IOException;
 import java.security.Principal;
-import java.util.Collection;
 import java.util.Enumeration;
 
 /**
@@ -142,30 +138,6 @@ public class HttpRequestBase extends RequestBase implements HttpRequest,HttpServ
         return false;
     }
 
-    @Override
-    public boolean authenticate(HttpServletResponse httpServletResponse) throws IOException, ServletException {
-        return false;
-    }
-
-    @Override
-    public void login(String s, String s1) throws ServletException {
-
-    }
-
-    @Override
-    public void logout() throws ServletException {
-
-    }
-
-    @Override
-    public Collection<Part> getParts() throws IOException, IllegalStateException, ServletException {
-        return null;
-    }
-
-    @Override
-    public Part getPart(String s) throws IOException, IllegalStateException, ServletException {
-        return null;
-    }
 
     public void setStream(SocketInputStream stream) {
         this.stream = stream;

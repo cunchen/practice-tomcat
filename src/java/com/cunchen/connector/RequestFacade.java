@@ -14,20 +14,18 @@ import java.util.Map;
  */
 public class RequestFacade implements ServletRequest {
 
-    private ServletRequest servletRequest;
+    private ServletRequest request;
 
     public RequestFacade(ServletRequest servletRequest) {
-        this.servletRequest = servletRequest;
+        this.request = servletRequest;
     }
 
-    @Override
-    public Object getAttribute(String s) {
-        return null;
+    public Object getAttribute(String attribute) {
+        return request.getAttribute(attribute);
     }
 
-    @Override
-    public Enumeration<String> getAttributeNames() {
-        return null;
+    public Enumeration getAttributeNames() {
+        return request.getAttributeNames();
     }
 
     @Override
@@ -145,58 +143,4 @@ public class RequestFacade implements ServletRequest {
         return null;
     }
 
-    @Override
-    public int getRemotePort() {
-        return 0;
-    }
-
-    @Override
-    public String getLocalName() {
-        return null;
-    }
-
-    @Override
-    public String getLocalAddr() {
-        return null;
-    }
-
-    @Override
-    public int getLocalPort() {
-        return 0;
-    }
-
-    @Override
-    public ServletContext getServletContext() {
-        return null;
-    }
-
-    @Override
-    public AsyncContext startAsync() {
-        return null;
-    }
-
-    @Override
-    public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) {
-        return null;
-    }
-
-    @Override
-    public boolean isAsyncStarted() {
-        return false;
-    }
-
-    @Override
-    public boolean isAsyncSupported() {
-        return false;
-    }
-
-    @Override
-    public AsyncContext getAsyncContext() {
-        return null;
-    }
-
-    @Override
-    public DispatcherType getDispatcherType() {
-        return null;
-    }
 }

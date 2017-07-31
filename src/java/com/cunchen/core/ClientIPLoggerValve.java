@@ -1,11 +1,8 @@
 package com.cunchen.core;
 
-import org.apache.catalina.Contained;
-import org.apache.catalina.Container;
-import org.apache.catalina.Valve;
-import org.apache.catalina.comet.CometEvent;
-import org.apache.catalina.connector.Request;
-import org.apache.catalina.connector.Response;
+
+import com.cunchen.Contained;
+import org.apache.catalina.*;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -34,31 +31,8 @@ public class ClientIPLoggerValve implements Valve, Contained {
     }
 
     @Override
-    public Valve getNext() {
-        return null;
-    }
-
-    @Override
-    public void setNext(Valve valve) {
+    public void invoke(Request request, Response response, ValveContext valveContext) throws IOException, ServletException {
 
     }
 
-    @Override
-    public void backgroundProcess() {
-
-    }
-
-    @Override
-    public void invoke(Request request, Response response) throws IOException, ServletException {
-    }
-
-    @Override
-    public void event(Request request, Response response, CometEvent cometEvent) throws IOException, ServletException {
-
-    }
-
-    @Override
-    public boolean isAsyncSupported() {
-        return false;
-    }
 }

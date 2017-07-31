@@ -1,11 +1,9 @@
 package com.cunchen.core;
 
-import com.cunchen.Pipeline;
-import com.cunchen.Valve;
-import com.cunchen.ValveContext;
+import com.cunchen.*;
 import org.apache.catalina.Container;
-import org.apache.catalina.connector.Request;
-import org.apache.catalina.connector.Response;
+
+import java.io.IOException;
 
 /**
  * SimplePipeline
@@ -69,11 +67,6 @@ public class SimplePipeline implements Pipeline {
 
     }
 
-    public void invoke(Request request, Response response) {
-
-
-    }
-
     protected class StandardPipelineValveContext implements ValveContext {
 
         protected int stage = 0;
@@ -83,7 +76,8 @@ public class SimplePipeline implements Pipeline {
 
         }
 
-        public void invokeNext(Request request, Response response) {
+        @Override
+        public void invokeNext(Request request, Response response) throws IOException {
             int subscript = stage;
             stage = stage + 1;
 
@@ -91,6 +85,5 @@ public class SimplePipeline implements Pipeline {
                 valves[subscript].invoke(request, response, this);
             }
         }
-
     }
 }

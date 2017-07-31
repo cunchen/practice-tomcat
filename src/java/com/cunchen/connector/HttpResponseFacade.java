@@ -5,7 +5,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collection;
 import java.util.Locale;
 
 /**
@@ -18,6 +17,27 @@ public class HttpResponseFacade implements HttpServletResponse {
 
     public HttpResponseFacade(HttpServletResponse response) {
         this.response = response;
+    }
+
+
+    @Override
+    public String getCharacterEncoding() {
+        return response.getCharacterEncoding();
+    }
+
+    @Override
+    public ServletOutputStream getOutputStream() throws IOException {
+        return response.getOutputStream();
+    }
+
+    @Override
+    public PrintWriter getWriter() throws IOException {
+        return response.getWriter();
+    }
+
+    @Override
+    public void setContentLength(int len) {
+
     }
 
     @Override
@@ -102,56 +122,6 @@ public class HttpResponseFacade implements HttpServletResponse {
 
     @Override
     public void setStatus(int i, String s) {
-
-    }
-
-    @Override
-    public int getStatus() {
-        return 0;
-    }
-
-    @Override
-    public String getHeader(String s) {
-        return null;
-    }
-
-    @Override
-    public Collection<String> getHeaders(String s) {
-        return null;
-    }
-
-    @Override
-    public Collection<String> getHeaderNames() {
-        return null;
-    }
-
-    @Override
-    public String getCharacterEncoding() {
-        return null;
-    }
-
-    @Override
-    public String getContentType() {
-        return null;
-    }
-
-    @Override
-    public ServletOutputStream getOutputStream() throws IOException {
-        return null;
-    }
-
-    @Override
-    public PrintWriter getWriter() throws IOException {
-        return null;
-    }
-
-    @Override
-    public void setCharacterEncoding(String s) {
-
-    }
-
-    @Override
-    public void setContentLength(int i) {
 
     }
 

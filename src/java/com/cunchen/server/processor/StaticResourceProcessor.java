@@ -1,9 +1,7 @@
 package com.cunchen.server.processor;
 
-import com.cunchen.server.io.HttpRequest;
-import com.cunchen.server.io.HttpResponse;
-import com.cunchen.server.io.Request;
-import com.cunchen.server.io.Response;
+import com.cunchen.connector.HttpRequest;
+import com.cunchen.connector.HttpResponse;
 
 /**
  * Created by wqd on 2016/12/26.

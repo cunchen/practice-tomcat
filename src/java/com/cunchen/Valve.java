@@ -1,7 +1,6 @@
 package com.cunchen;
 
-import org.apache.catalina.connector.Request;
-import org.apache.catalina.connector.Response;
+import java.io.IOException;
 
 /**
  * 阀门接口
@@ -11,6 +10,6 @@ public interface Valve {
 
     public String getInfo() ;
 
-    public void invoke(Request request, Response response, ValveContext context);
+    public void invoke(Request request, Response response, ValveContext context) throws IOException;
 
 }

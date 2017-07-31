@@ -1,11 +1,11 @@
-package com.cunchen.server.io;
+package com.cunchen.connector;
 
 import com.cunchen.Constants;
+import com.cunchen.connector.HttpRequest;
 import com.cunchen.connector.ResponseStream;
 import com.cunchen.connector.ResponseWriter;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.*;
 import java.nio.charset.Charset;

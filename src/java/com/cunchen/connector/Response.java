@@ -1,6 +1,7 @@
-package com.cunchen.server.io;
+package com.cunchen.connector;
 
 import com.cunchen.Constants;
+import com.cunchen.connector.Request;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;

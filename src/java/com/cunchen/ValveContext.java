@@ -1,7 +1,6 @@
 package com.cunchen;
 
-import org.apache.catalina.connector.Response;
-import org.apache.catalina.connector.Request;
+import java.io.IOException;
 
 /**
  * ValveContext
@@ -9,5 +8,5 @@ import org.apache.catalina.connector.Request;
  */
 public interface ValveContext {
 
-    public void invokeNext(Request request, Response response);
+    public void invokeNext(Request request, Response response) throws IOException;
 }

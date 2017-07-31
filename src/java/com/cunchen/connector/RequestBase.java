@@ -1,12 +1,17 @@
 package com.cunchen.connector;
 
 import com.cunchen.Request;
+import org.apache.catalina.*;
+import org.apache.catalina.Response;
 
 import javax.servlet.*;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.Socket;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -144,57 +149,157 @@ public class RequestBase implements Request,ServletRequest {
     }
 
     @Override
-    public int getRemotePort() {
-        return 0;
-    }
-
-    @Override
-    public String getLocalName() {
+    public String getAuthorization() {
         return null;
     }
 
     @Override
-    public String getLocalAddr() {
+    public void setAuthorization(String authorization) {
+
+    }
+
+    @Override
+    public Connector getConnector() {
         return null;
     }
 
     @Override
-    public int getLocalPort() {
-        return 0;
+    public void setConnector(Connector connector) {
+
     }
 
     @Override
-    public ServletContext getServletContext() {
+    public Context getContext() {
         return null;
     }
 
     @Override
-    public AsyncContext startAsync() {
+    public void setContext(Context context) {
+
+    }
+
+    @Override
+    public String getInfo() {
         return null;
     }
 
     @Override
-    public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) {
+    public ServletRequest getRequest() {
         return null;
     }
 
     @Override
-    public boolean isAsyncStarted() {
-        return false;
-    }
-
-    @Override
-    public boolean isAsyncSupported() {
-        return false;
-    }
-
-    @Override
-    public AsyncContext getAsyncContext() {
+    public Response getResponse() {
         return null;
     }
 
     @Override
-    public DispatcherType getDispatcherType() {
+    public void setResponse(Response response) {
+
+    }
+
+    @Override
+    public Socket getSocket() {
         return null;
+    }
+
+    @Override
+    public void setSocket(Socket socket) {
+
+    }
+
+    @Override
+    public InputStream getStream() {
+        return null;
+    }
+
+    @Override
+    public void setStream(InputStream stream) {
+
+    }
+
+    @Override
+    public Wrapper getWrapper() {
+        return null;
+    }
+
+    @Override
+    public void setWrapper(Wrapper wrapper) {
+
+    }
+
+    @Override
+    public ServletInputStream createInputStream() throws IOException {
+        return null;
+    }
+
+    @Override
+    public void finishRequest() throws IOException {
+
+    }
+
+    @Override
+    public Object getNote(String name) {
+        return null;
+    }
+
+    @Override
+    public Iterator getNoteNames() {
+        return null;
+    }
+
+    @Override
+    public void recycle() {
+
+    }
+
+    @Override
+    public void removeNote(String name) {
+
+    }
+
+    @Override
+    public void setContentLength(int length) {
+
+    }
+
+    @Override
+    public void setContentType(String type) {
+
+    }
+
+    @Override
+    public void setNote(String name, Object value) {
+
+    }
+
+    @Override
+    public void setProtocol(String protocol) {
+
+    }
+
+    @Override
+    public void setRemoteAddr(String remote) {
+
+    }
+
+    @Override
+    public void setScheme(String scheme) {
+
+    }
+
+    @Override
+    public void setSecure(boolean secure) {
+
+    }
+
+    @Override
+    public void setServerName(String name) {
+
+    }
+
+    @Override
+    public void setServerPort(int port) {
+
     }
 }

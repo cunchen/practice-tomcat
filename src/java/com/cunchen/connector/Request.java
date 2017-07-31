@@ -1,24 +1,57 @@
-package com.cunchen.server.io;
+package com.cunchen.connector;
 
 import javax.servlet.*;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
 
 /**
- * HttpRequest包装类
- * Created by wqd on 2017/1/7.
+ * Request请求实体类
+ * Created by wqd on 2016/12/26.
  */
-public class HttpRequestFacde implements ServletRequest {
+public class Request implements ServletRequest {
 
-    private final ServletRequest servletRequest;
+    private final InputStream inputStream;
 
-    public HttpRequestFacde(ServletRequest servletRequest) {
-        this.servletRequest = servletRequest;
+    private final static int BUFFER_SIZE = 2048;
+
+    private String uri;
+
+    public Request(InputStream input) {
+        this.inputStream = input;
     }
+
+    public void parse() {
+        StringBuffer requset = new StringBuffer(BUFFER_SIZE);
+        int i;
+        byte[] buffer = new byte[BUFFER_SIZE];
+        try {
+            i = inputStream.read(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+            i = -1;
+        }
+        for (int j = 0; j < i; j++) {
+            requset.append((char) buffer[j]);
+        }
+        System.out.println(requset.toString());
+        uri = parseUri(requset.toString());
+    }
+
+    String parseUri(String requestString) {
+        int index1, index2;
+        index1 = requestString.indexOf(' ');
+        if(index1 != -1) {
+            index2 = requestString.indexOf(' ', index1 + 1);
+            return index2 > index1 ? requestString.substring(index1 + 1, index2) : null;
+        }
+        return null;
+    }
+
 
     @Override
     public Object getAttribute(String s) {
@@ -26,7 +59,7 @@ public class HttpRequestFacde implements ServletRequest {
     }
 
     @Override
-    public Enumeration<String> getAttributeNames() {
+    public Enumeration getAttributeNames() {
         return null;
     }
 
@@ -61,7 +94,7 @@ public class HttpRequestFacde implements ServletRequest {
     }
 
     @Override
-    public Enumeration<String> getParameterNames() {
+    public Enumeration getParameterNames() {
         return null;
     }
 
@@ -71,7 +104,7 @@ public class HttpRequestFacde implements ServletRequest {
     }
 
     @Override
-    public Map<String, String[]> getParameterMap() {
+    public Map getParameterMap() {
         return null;
     }
 
@@ -126,7 +159,7 @@ public class HttpRequestFacde implements ServletRequest {
     }
 
     @Override
-    public Enumeration<Locale> getLocales() {
+    public Enumeration getLocales() {
         return null;
     }
 
@@ -145,5 +178,7 @@ public class HttpRequestFacde implements ServletRequest {
         return null;
     }
 
-
+    public String getUri() {
+        return uri;
+    }
 }
