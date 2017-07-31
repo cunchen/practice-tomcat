@@ -7,21 +7,22 @@ import org.apache.catalina.Container;
  * Created by wqd on 2017/3/9.
  */
 public interface Pipeline {
-    org.apache.catalina.Valve getBasic();
 
-    void setBasic(Valve var1);
+    //设置基本阀门
+    public void setBasic(Valve basic);
 
-    void addValve(Valve var1);
+    //获取基本阀门
+    public Valve getBasic();
 
-    org.apache.catalina.Valve[] getValves();
+    //添加阀门
+    public void addValve(Valve valve);
 
-    void removeValve(Valve var1);
+    //删除阀门
+    public void remove(Valve valve);
 
-    org.apache.catalina.Valve getFirst();
+    //获得所有非基本阀门
+    public Valve[] getValves();
 
-    boolean isAsyncSupported();
-
-    Container getContainer();
-
-    void setContainer(Container var1);
+    //代理
+    public void invoke(Request request, Response response);
 }
