@@ -1,30 +1,40 @@
 package com.cunchen.core;
 
+import com.cunchen.*;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
-import org.apache.catalina.*;
 
-import javax.naming.directory.DirContext;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
-import javax.servlet.UnavailableException;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 /**
  * Wrapper接口实现
- * Created by wqd on 2017/3/9.
+ * Created by cunchen on 2017/3/9.
  */
-public class SimpleWrapper implements Wrapper {
+public class SimpleWrapper extends ContainerBase implements Wrapper, Pipeline{
 
     private Loader loader;
     protected Container parent;
 
-    /**
-     * 管道类
-     */
+
+    private boolean unuploading;
+
+
+    //Pipeline
     private SimplePipeline pipeline = new SimplePipeline(this);
 
-    public SimpleWrapper() {
+    /**
+     * Servlet服务模式
+     * 只能同时响应一条请求
+     *
+     * 如果为True，你不能在servlet service中同时响应两条请求。servlet容器
+     * 将强制servlet不会同时响应两条请求。Servlet容器可以确保请求同步访问
+     * 一个单例的servlet实例，或者将每一个新的请求分配到一个servlet池中的
+     * 空闲的servlet实例
+     */
+    private volatile boolean singleThreadModel;
+
+    private SimpleWrapper() {
 
         getPipeline().setBasic(new SimpleWrapperValve());
     }
@@ -37,178 +47,34 @@ public class SimpleWrapper implements Wrapper {
         this.pipeline = pipeline;
     }
 
-    @Override
-    public long getAvailable() {
-        return 0;
-    }
 
     @Override
-    public void setAvailable(long available) {
+    public void addChild(Container child) {
 
     }
 
     @Override
-    public String getJspFile() {
+    public void removeChild(Container child) {
+
+    }
+
+    @Override
+    public Container findChild(String childName) {
         return null;
     }
 
     @Override
-    public void setJspFile(String jspFile) {
-
+    public Container[] findChildren() {
+        return new Container[0];
     }
 
     @Override
-    public int getLoadOnStartup() {
-        return 0;
-    }
-
-    @Override
-    public void setLoadOnStartup(int value) {
-
-    }
-
-    @Override
-    public String getRunAs() {
+    public Container getParent() {
         return null;
     }
 
     @Override
-    public void setRunAs(String runAs) {
-
-    }
-
-    @Override
-    public String getServletClass() {
-        return null;
-    }
-
-    @Override
-    public void setServletClass(String servletClass) {
-
-    }
-
-    @Override
-    public boolean isUnavailable() {
-        return false;
-    }
-
-    @Override
-    public void addInitParameter(String name, String value) {
-
-    }
-
-    @Override
-    public void addInstanceListener(InstanceListener listener) {
-
-    }
-
-    @Override
-    public void addSecurityReference(String name, String link) {
-
-    }
-
-    @Override
-    public Servlet allocate() throws ServletException {
-        return null;
-    }
-
-    @Override
-    public void deallocate(Servlet servlet) throws ServletException {
-
-    }
-
-    @Override
-    public String findInitParameter(String name) {
-        return null;
-    }
-
-    @Override
-    public String[] findInitParameters() {
-        return new String[0];
-    }
-
-    @Override
-    public String findSecurityReference(String name) {
-        return null;
-    }
-
-    @Override
-    public String[] findSecurityReferences() {
-        return new String[0];
-    }
-
-    @Override
-    public void load() throws ServletException {
-
-    }
-
-    @Override
-    public void removeInitParameter(String name) {
-
-    }
-
-    @Override
-    public void removeInstanceListener(InstanceListener listener) {
-
-    }
-
-    @Override
-    public void removeSecurityReference(String name) {
-
-    }
-
-    @Override
-    public void unavailable(UnavailableException unavailable) {
-
-    }
-
-    @Override
-    public void unload() throws ServletException {
-
-    }
-
-    @Override
-    public String getInfo() {
-        return null;
-    }
-
-    @Override
-    public org.apache.catalina.Loader getLoader() {
-        return null;
-    }
-
-    @Override
-    public void setLoader(org.apache.catalina.Loader loader) {
-
-    }
-
-    @Override
-    public Logger getLogger() {
-        return null;
-    }
-
-    @Override
-    public void setLogger(Logger logger) {
-
-    }
-
-    @Override
-    public Manager getManager() {
-        return null;
-    }
-
-    @Override
-    public void setManager(Manager manager) {
-
-    }
-
-    @Override
-    public Cluster getCluster() {
-        return null;
-    }
-
-    @Override
-    public void setCluster(Cluster cluster) {
+    public void setParent(Container parent) {
 
     }
 
@@ -223,88 +89,28 @@ public class SimpleWrapper implements Wrapper {
     }
 
     @Override
-    public Container getParent() {
+    public void setBasic(Valve basic) {
+
+    }
+
+    @Override
+    public Valve getBasic() {
         return null;
     }
 
     @Override
-    public void setParent(Container container) {
+    public void addValve(Valve valve) {
 
     }
 
     @Override
-    public ClassLoader getParentClassLoader() {
-        return null;
-    }
-
-    @Override
-    public void setParentClassLoader(ClassLoader parent) {
+    public void remove(Valve valve) {
 
     }
 
     @Override
-    public Realm getRealm() {
-        return null;
-    }
-
-    @Override
-    public void setRealm(Realm realm) {
-
-    }
-
-    @Override
-    public DirContext getResources() {
-        return null;
-    }
-
-    @Override
-    public void setResources(DirContext resources) {
-
-    }
-
-    @Override
-    public void addChild(Container child) {
-
-    }
-
-    @Override
-    public void addContainerListener(ContainerListener listener) {
-
-    }
-
-    @Override
-    public void addMapper(Mapper mapper) {
-
-    }
-
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-
-    }
-
-    @Override
-    public Container findChild(String name) {
-        return null;
-    }
-
-    @Override
-    public Container[] findChildren() {
-        return new Container[0];
-    }
-
-    @Override
-    public ContainerListener[] findContainerListeners() {
-        return new ContainerListener[0];
-    }
-
-    @Override
-    public Mapper findMapper(String protocol) {
-        return null;
-    }
-
-    @Override
-    public Mapper[] findMappers() {
-        return new Mapper[0];
+    public Valve[] getValves() {
+        return new Valve[0];
     }
 
     @Override
@@ -312,28 +118,49 @@ public class SimpleWrapper implements Wrapper {
 
     }
 
+    /**
+     * @return
+     * @throws ServletException
+     */
     @Override
-    public Container map(Request request, boolean update) {
+    public Servlet allocate() throws ServletException {
+
+        //If unuploading this servlet, throw an exception
+        if(unuploading) {
+            throw new ServletException("standardWrapper.unloading" + getName());
+        }
+
+
+        if(!singleThreadModel) {
+
+        }
+
         return null;
     }
 
-    @Override
-    public void removeChild(Container child) {
+    /**
+     * 加载Servlet
+     * @return 加载Servlet
+     */
+    public synchronized Servlet loadServlet() {
 
+        if(!singleThreadModel) {
+
+        }
+
+        return null;
     }
 
-    @Override
-    public void removeContainerListener(ContainerListener listener) {
 
+
+    //静态类单例模式
+    private SimpleWrapper getInstance() {
+        return SingletonInstance.ISNTANCE;
     }
 
-    @Override
-    public void removeMapper(Mapper mapper) {
+    //静态内部类
+    private static class SingletonInstance {
 
-    }
-
-    @Override
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-
+        private static SimpleWrapper ISNTANCE = new SimpleWrapper();
     }
 }

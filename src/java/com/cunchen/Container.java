@@ -30,4 +30,10 @@ public interface Container {
 
     //设置容器名称
     public void setName(String name);
+
+    //设置加载器
+    public void setLoader(Loader loader);
+
+    //获取加载器
+    public Loader getLoader();
 }

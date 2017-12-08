@@ -1,29 +1,41 @@
 package com.cunchen.core;
 
-import com.cunchen.Container;
+import com.cunchen.*;
 
+import javax.servlet.ServletException;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
  * ContainerBase
  * Created by admin on 2017/7/31.
  */
-public abstract class ContainerBase implements Container {
+public abstract class ContainerBase implements Container, Pipeline {
 
     /**
      * 子容器存储
      */
-    private HashMap<String, Container> children = new HashMap();
+    protected HashMap<String, Container> children = new HashMap();
 
     /**
      * Name
      */
-    private String name ;
+    protected String name ;
 
     /**
      * 父容器
      */
-    private Container parent;
+    protected Container parent;
+
+    /**
+     * Pipeline实例
+     */
+    protected Pipeline pipeline = new StandardPipeline();
+
+    /**
+     * Loader
+     */
+    protected Loader loader;
 
 
     /**
@@ -100,5 +112,58 @@ public abstract class ContainerBase implements Container {
         this.parent.removeChild(this);
         this.name = name;
         this.parent.addChild(this);
+    }
+
+    //设置基本阀门
+    public void setBasic(Valve basic) {
+        pipeline.setBasic(basic);
+    }
+
+    //获取基本阀门
+    public Valve getBasic() {
+        return pipeline.getBasic();
+    }
+
+    //添加阀门
+    public void addValve(Valve valve) {
+        pipeline.addValve(valve);
+    }
+
+    //删除阀门
+    public void remove(Valve valve) {
+        pipeline.remove(valve);
+    }
+
+    //获得所有非基本阀门
+    public Valve[] getValves(){
+        return pipeline.getValves();
+    }
+
+    //代理
+    public void invoke(Request request, Response response) throws IOException, ServletException {
+        pipeline.invoke(request,response);
+    }
+
+
+    /**
+     * 设置loader
+     * @param loader 加载器
+     */
+    @Override
+    public void setLoader(Loader loader) {
+        this.loader = loader;
+    }
+
+    /**
+     * 获取类加载器
+     * @return Loader 加载器
+     */
+    @Override
+    public Loader getLoader() {
+        if (loader != null)
+            return (loader);
+        if (parent != null)
+            return (parent.getLoader());
+        return (null);
     }
 }

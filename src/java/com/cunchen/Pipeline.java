@@ -1,6 +1,7 @@
 package com.cunchen;
 
-import org.apache.catalina.Container;
+import javax.servlet.ServletException;
+import java.io.IOException;
 
 /**
  * Pipeline
@@ -24,5 +25,5 @@ public interface Pipeline {
     public Valve[] getValves();
 
     //代理
-    public void invoke(Request request, Response response);
+    public void invoke(Request request, Response response) throws IOException, ServletException;
 }

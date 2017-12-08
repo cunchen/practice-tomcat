@@ -1,5 +1,6 @@
 package com.cunchen;
 
+import javax.servlet.ServletException;
 import java.io.IOException;
 
 /**
@@ -8,5 +9,9 @@ import java.io.IOException;
  */
 public interface ValveContext {
 
-    public void invokeNext(Request request, Response response) throws IOException;
+    public String getInfo();
+
+
+    //代理方法
+    public void invokeNext(Request request, Response response) throws IOException, ServletException;
 }

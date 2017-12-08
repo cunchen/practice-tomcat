@@ -1,8 +1,9 @@
 package com.cunchen.core;
 
-import com.cunchen.*;
-import org.apache.catalina.Container;
 
+import com.cunchen.*;
+
+import javax.servlet.ServletException;
 import java.io.IOException;
 
 /**
@@ -23,7 +24,7 @@ public class SimplePipeline implements Pipeline {
     }
 
     @Override
-    public org.apache.catalina.Valve getBasic() {
+    public Valve getBasic() {
         return null;
     }
 
@@ -38,34 +39,20 @@ public class SimplePipeline implements Pipeline {
     }
 
     @Override
-    public org.apache.catalina.Valve[] getValves() {
-        return new org.apache.catalina.Valve[0];
-    }
-
-    @Override
-    public void removeValve(Valve valve) {
+    public void remove(Valve valve) {
 
     }
 
     @Override
-    public org.apache.catalina.Valve getFirst() {
-        return null;
+    public Valve[] getValves() {
+        return new Valve[0];
     }
 
     @Override
-    public boolean isAsyncSupported() {
-        return false;
-    }
-
-    @Override
-    public Container getContainer() {
-        return null;
-    }
-
-    @Override
-    public void setContainer(Container container) {
+    public void invoke(Request request, Response response) throws IOException, ServletException {
 
     }
+
 
     protected class StandardPipelineValveContext implements ValveContext {
 
@@ -77,7 +64,7 @@ public class SimplePipeline implements Pipeline {
         }
 
         @Override
-        public void invokeNext(Request request, Response response) throws IOException {
+        public void invokeNext(Request request, Response response) throws IOException, ServletException {
             int subscript = stage;
             stage = stage + 1;
 
